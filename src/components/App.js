@@ -1,12 +1,18 @@
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
-import Initial from './Initial.js/index.js'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Home from './Home.js/index.js'
+
+import { UserContextProvider } from '../contexts/UserContext.js'
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Initial/>} />
-      </Routes>
-    </BrowserRouter>
+    <UserContextProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/:testId" element={<Home />} />
+          <Route path="/:testId/results" element={<Home />} />
+        </Routes>
+      </BrowserRouter>
+    </UserContextProvider>
   )
 }
