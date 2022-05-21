@@ -159,15 +159,16 @@ export default function TestPage() {
 
                 const cleanAnswers = allQuestions.map((q) => {
                     let correctAnswer = "";
-                    // console.log(q);
+                    let title = q.title;
+
                     q.answers.forEach((ans) => {
-                        // console.log(ans);
                         if (ans.isTrue) {
                             correctAnswer = ans.text;
                         }
                     });
 
                     return {
+                        title: title,
                         correctAnswer: correctAnswer,
                         answer: null,
                         feedback: null,

@@ -10,8 +10,8 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/:testId" element={<TestPage />} />
-          <Route path="/:testId/results" element={<Home />} />
+          <Route path="/tests/:testId" element={<TestPage />} />
+          <Route path="/tests/:testId/results" element={<Home />} />
         </Routes>
       </BrowserRouter>
     </UserContextProvider>
