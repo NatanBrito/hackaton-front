@@ -1,76 +1,86 @@
 import styled from "styled-components";
 import axios from "axios";
-import { useState, useEffect} from "react"
+import { useState, useEffect, useContext } from "react"
 import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../../contexts/UserContext";
+
 export default function Home() {
-    const Navigate=useNavigate();
-    const getUri= "https://mongo-hackthon.herokuapp.com/tests";
-    const [disciplinas,setDisciplinas]= useState([]);
-    useEffect(()=>{
-      const promise= axios.get(getUri)
-      promise.then((res)=>{
-          console.log(res.data)
-          setDisciplinas(res.data)
-      })
-      promise.catch((e)=>{
-          console.log("erroooou")
-      })
-    },[])
+
+    const { currentTest, setCurrentTest, answers, setAnswers, fbColors } =
+        useContext(UserContext);
+
+    const Navigate = useNavigate();
+    const getUri = "https://mongo-hackthon.herokuapp.com/tests";
+    const [disciplinas, setDisciplinas] = useState([]);
+    useEffect(() => {
+
+        setCurrentTest(null);
+        setAnswers(null);
+
+        const promise = axios.get(getUri)
+        promise.then((res) => {
+            console.log(res.data)
+            setDisciplinas(res.data)
+        })
+        promise.catch((e) => {
+            console.log("erroooou")
+        })
+    }, [])
     return (
         <Materias />
     )
 
- function Materias(){
-     let count=0;
-     return(
-         <Container>
-             <Hello>
-             <span> olá, Aluno</span>
-             </Hello>
-            <AllTest>
-                {disciplinas.map((materia,index)=>{
-                    count++
-                    return(
-                    <Test key={index+Date.now()} 
-                    id={materia._id}
-                    color="blue"
-                     text={materia.type} description={materia.title}
-                      numQuestion={materia.questions.length}/>
-                    )
-                })
+    function Materias() {
+        let count = 0;
+        return (
+            <Container>
+                <Hello>
+                    <span>Olá, aluno! 🙃</span>
+                </Hello>
+                <AllTest>
+                    {disciplinas.map((materia, index) => {
+                        count++
+                        return (
+                            <Test key={index + Date.now()}
+                                id={materia._id}
+                                color="blue"
+                                text={materia.type} description={materia.title}
+                                numQuestion={materia.questions.length} />
+                        )
+                    })
 
-                }
-            </AllTest>
-            <Create onClick={()=>{ Navigate("/newTest") }}>
-              + Criar nova
-            </Create>
-         </Container>
-     )
- }
+                    }
+                </AllTest>
+                <Create onClick={() => { Navigate("/newTest") }}>
+                    + Criar nova
+                </Create>
+            </Container>
+        )
+    }
 
- function Test({color,text,numQuestion,description, id}){
-    return(
-        <>
-        <Disciplina className={color} onClick={()=>{ Navigate(`/tests/${id}`)}} >
-        <Descrip className="aumentar">
-            
-        <h1>{text}</h1>
-        </Descrip>
-        <Description className="hidden">
-        <h2 className="hidden">{description}</h2>
-        </Description>
-        <h2 className="hidden">{numQuestion}q</h2>
-        </Disciplina>
-        </>
-     )
- }
+    function Test({ color, text, numQuestion, description, id }) {
+        return (
+            <>
+                <Disciplina className={color} onClick={() => { Navigate(`/tests/${id}`) }} >
+                    <Descrip className="aumentar">
+
+                        <h1>{text}</h1>
+                    </Descrip>
+                    <Description className="hidden">
+                        <h2 className="hidden">{description}</h2>
+                    </Description>
+                    <h2 className="hidden">{numQuestion}q</h2>
+                </Disciplina>
+            </>
+        )
+    }
 }
-const Descrip=styled.div`
+const Descrip = styled.div`
 width: 40%;
 margin-right: 2px;
 height: 45px;
 `
-const Description=styled.div`
+const Description = styled.div`
 width: 50%;
 height: 45px;
 display: flex;
@@ -86,7 +96,7 @@ overflow: hidden;
     }
 }
 `
- const Create=styled.button`
+const Create = styled.button`
  font-size: 20px;
  font-weight: 700;
  font-family: 'Roboto', sans-serif;
@@ -103,7 +113,7 @@ overflow: hidden;
      color: white;
  }
  `
- const AllTest=styled.div`
+const AllTest = styled.div`
  display: flex;
  justify-content: center;
  align-items: center;
@@ -112,7 +122,7 @@ overflow: hidden;
   width: 100%;
 
  `
- const Hello=styled.div`
+const Hello = styled.div`
  display: flex;
  margin-top:8%;
  margin-bottom: 5%;
@@ -125,7 +135,7 @@ overflow: hidden;
     font-weight: 700;
  }
  `
- const Container=styled.div`
+const Container = styled.div`
  width: 100vw;
  height: 100vh;
  button{
@@ -144,7 +154,7 @@ overflow: hidden;
  }
 
  `
- const Disciplina=styled.div`
+const Disciplina = styled.div`
  border:none ;
  padding: 2px;
  display: flex;
