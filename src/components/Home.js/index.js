@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import axios from "axios";
 import { useState, useEffect} from "react"
+import { Link, useNavigate } from "react-router-dom";
 export default function Home() {
+    const Navigate=useNavigate();
     const getUri= "https://mongo-hackthon.herokuapp.com/tests";
     const [disciplinas,setDisciplinas]= useState([]);
     useEffect(()=>{
@@ -30,7 +32,8 @@ export default function Home() {
                     count++
                     return(
                     <Test key={index+Date.now()} 
-                    color={count===2?"blue":"purple"}
+                    id={materia._id}
+                    color={false?"blue":"purple"}
                      text={materia.type} description={materia.title}
                       numQuestion={materia.questions.length}/>
                     )
@@ -38,27 +41,49 @@ export default function Home() {
 
                 }
             </AllTest>
-            <Create>
+            <Create onClick={()=>{ Navigate("/newTest") }}>
               + Criar nova
             </Create>
          </Container>
      )
  }
 
- function Test({color,text,numQuestion,description}){
-     return(
-        <Disciplina className={color}>
+ function Test({color,text,numQuestion,description, id}){
+    return(
+        <>
+        <Disciplina className={color} onClick={()=>{ Navigate(`/tests/${id}`)}} >
+        <Descrip className="aumentar">
+            
         <h1>{text}</h1>
-        <Description>
-        <h2>{description}</h2>
+        </Descrip>
+        <Description className="hidden">
+        <h2 className="hidden">{description}</h2>
         </Description>
-        <h2>{numQuestion}q</h2>
+        <h2 className="hidden">{numQuestion}q</h2>
         </Disciplina>
+        </>
      )
  }
 }
+const Descrip=styled.div`
+width: 50%;
+height: 45px;
+`
 const Description=styled.div`
+width: 50%;
+height: 45px;
+display: flex;
+align-items: center;
 overflow: hidden;
+@media screen and (max-width: 500px) {
+    .hidden{
+        display: none;
+    }
+    .aumentar{
+        display: flex;
+        justify-content: center;
+    }
+}
 `
  const Create=styled.button`
  font-size: 20px;
@@ -103,10 +128,7 @@ overflow: hidden;
  height: 100vh;
  button{
      cursor: pointer;
-     :hover{
-        transition: 1s;
-        background-color: green;
-    }
+     
  }
  display: flex;
  justify-content: center;
@@ -125,7 +147,7 @@ overflow: hidden;
     background-color: purple;
  }
  `
- const Disciplina=styled.button`
+ const Disciplina=styled.div`
  border:none ;
  padding: 2px;
  display: flex;
@@ -136,6 +158,10 @@ overflow: hidden;
  background-color: blue;
  margin-bottom: 2%;
  border-radius: 10px;
+ :hover{
+        transition: 1s;
+        background-color: green;
+    }
  h1{
      overflow: hidden;
      display: flex;
