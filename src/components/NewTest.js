@@ -53,18 +53,15 @@ export default function NewTest() {
 
   return (
     <Main>
-      {/* FIXME */}
       <header>
-        <h1 onClick={() => navigate("/")}>Return</h1>
-        <h1>Nome do app</h1>
+        <ion-icon onClick={() => navigate("/")} name="home-outline"></ion-icon>
+        <h1>Create New Test</h1>
       </header>
 
-      <input
-        id="question-number"
-        type="number"
-        placeholder="Number of Questions"
-        onChange={(e) => setQuestions(e.target.value)}
-      />
+      <div>
+        <label htmlFor="question-number">Number of questions:</label>
+        <input id="question-number" type="number" onChange={(e) => setQuestions(e.target.value)} />
+      </div>
 
       <form onSubmit={(e) => submitForm(e)}>
         <input type="text" placeholder="Test Title" required />
@@ -103,11 +100,35 @@ const Main = styled.main`
     padding: 20px;
 
     box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.5);
-    background-color: blue;
+    background-color: darkblue;
     color: #ffffff;
 
     margin-bottom: 25px;
-    font-size: 35px;
+    font-size: 30px;
+
+    ion-icon {
+      cursor: pointer;
+    }
+  }
+
+  label {
+    margin-bottom: 15px;
+
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  div {
+    width: 85%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    label {
+      font-size: 20px;
+      margin-right: 15px;
+    }
   }
 
   form {
@@ -119,24 +140,18 @@ const Main = styled.main`
   }
 
   #question-number {
-    width: 45%;
+    width: 30%;
+    max-width: 100px;
     min-height: 40px;
 
     text-align: center;
-    font-size: 15px;
+    font-size: 20px;
   }
 
   article {
     width: 100%;
     display: flex;
     flex-direction: column;
-  }
-
-  label {
-    margin-bottom: 15px;
-
-    font-size: 30px;
-    font-weight: 700;
   }
 
   input {
@@ -162,7 +177,7 @@ const Main = styled.main`
 
     border: none;
     border-radius: 10px;
-    background-color: blue;
+    background-color: darkblue;
 
     font-size: 20px;
     color: #ffffff;
