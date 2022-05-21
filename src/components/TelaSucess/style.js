@@ -17,22 +17,18 @@ export const Container = styled.section`
         left: 0;
         top: 0;
         display: flex;
-        justify-content: center;
+        justify-content: space-evenly;
         align-items: center;
         background-color: darkblue;
         position: relative;
         
         .icon{
-            position: absolute;
-            left: 10px;
-            top: 10px;
             font-size: 32px;
             color: #fff;
         }
 
         h1{
-            font-size: 24px;
-            font-weight: 700;
+            max-width: 80%;
             line-height: 20px;
             color: #fff;
             letter-spacing: 0.02em;
@@ -70,12 +66,12 @@ export const Container = styled.section`
             flex-direction: column;
             justify-content: space-evenly;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 24px;
             background-color: #fff;
 
             p{
                 width: 100%;
-                height: 15%;
+                min-height: 15%;
                 display: flex;
                 align-items: center;
                 font-size: 18px;
@@ -86,7 +82,7 @@ export const Container = styled.section`
             }
             
             .easy{
-                background-color: green;
+                background-color: lightblue;
             }
             .medium{
                 background-color: orange;

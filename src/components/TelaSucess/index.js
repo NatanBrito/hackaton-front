@@ -8,7 +8,7 @@ import { IoHomeSharp } from 'react-icons/io5';
 import { Container } from './style.js'; 
 
 function TelaSucess() {
-    const { answers, tests } = useContext(UserContext);
+    const { answers, currentTest } = useContext(UserContext);
     const navigate = useNavigate();
 
     const numeroDeAnswers = answers.length;
@@ -20,7 +20,10 @@ function TelaSucess() {
         <Container>
             <header>
                 <IoHomeSharp className='icon' onClick={()=>navigate('/')}/>
-                <h1>{tests.type}</h1>
+                <h1>
+                    {currentTest.type}
+                    <p>{currentTest.title}</p>
+                </h1>
             </header>
             <p className='result'>{`Parabéns! Você acertou ${numeroDeAnswers} de ${numeroDeAcertos} questões!`}</p>
             <main>

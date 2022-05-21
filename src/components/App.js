@@ -14,8 +14,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/newTest" element={<NewTest />} />
           <Route path="/tests/:testId" element={<TestPage />} />
-          <Route path="/tests/:testId/results" element={<Home />} />
-          <Route path="/sucess" element={<TelaSucess />} />
+          <Route path="/tests/:testId/results" element={<TelaSucess />} />
         </Routes>
       </BrowserRouter>
     </UserContextProvider>
