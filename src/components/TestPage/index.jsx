@@ -87,7 +87,6 @@ const Notification = styled.div`
 const Main = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     align-items: center;
     height: 100%;
     width: 100%;
@@ -106,9 +105,17 @@ const Footer = styled.div`
 `;
 
 const HeaderLeft = styled.div`
+    display: flex;
+    gap: 20px;
     h1 {
         font-size: 20px;
         font-weight: 700;
+    }
+    h3 {
+        font-size: 14px;
+        background-color: rgba(0, 0, 0, 0.2);
+        padding: 5px;
+        border-radius: 3px;
     }
 `;
 
@@ -126,6 +133,27 @@ const SendButton = styled.div`
     padding: 20px 50px;
     background-color: #ddd;
     border-radius: 10px;
+    cursor: pointer;
+    :hover {
+        background-color: #bbb;
+    }
+`;
+
+const Nav = styled.div`
+    display: flex;
+    gap: 10px;
+`;
+
+const NavButton = styled.div`
+    width: 50px;
+    height: 50px;
+    border-radius: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #ddd;
     cursor: pointer;
     :hover {
         background-color: #bbb;
@@ -189,6 +217,24 @@ export default function TestPage() {
         setCurrentQuestionIndex(index);
     }
 
+    function nextPage() {
+        console.log("next");
+        let newIndex = currentQuestionIndex + 1;
+        if (newIndex < answers.length) {
+            setCurrentQuestion(questions[newIndex]);
+            setCurrentQuestionIndex(newIndex);
+        }
+    }
+
+    function previousPage() {
+        console.log("prev");
+        let newIndex = currentQuestionIndex - 1;
+        if (newIndex >= 0) {
+            setCurrentQuestion(questions[newIndex]);
+            setCurrentQuestionIndex(newIndex);
+        }
+    }
+
     const questionButtonsElements =
         questions && answers ? (
             questions.map((q, idx) => {
@@ -236,16 +282,14 @@ export default function TestPage() {
                         <>
                             <HeaderLeft>
                                 <h1>{currentTest.title}</h1>
+                                <h3>{currentTest.type}</h3>
                             </HeaderLeft>
                         </>
                     ) : (
                         <></>
                     )}
                 </HeaderTop>
-                <HeaderBottom>
-                    {/* <QuestionButton selected={true} color={"green"}>1</QuestionButton> */}
-                    {questionButtonsElements}
-                </HeaderBottom>
+                <HeaderBottom>{questionButtonsElements}</HeaderBottom>
             </Header>
             <Main>
                 {currentQuestion ? (
@@ -253,6 +297,23 @@ export default function TestPage() {
                         question={currentQuestion}
                         index={currentQuestionIndex}
                     ></Question>
+                ) : (
+                    <></>
+                )}
+
+                {answers ? (
+                    <Nav>
+                        {currentQuestionIndex > 0 ? (
+                            <NavButton onClick={previousPage}>{"<"}</NavButton>
+                        ) : (
+                            <></>
+                        )}
+                        {currentQuestionIndex < answers.length - 1 ? (
+                            <NavButton onClick={nextPage}>{">"}</NavButton>
+                        ) : (
+                            <></>
+                        )}
+                    </Nav>
                 ) : (
                     <></>
                 )}
