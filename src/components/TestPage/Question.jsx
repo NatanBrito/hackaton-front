@@ -1,3 +1,4 @@
+import {useState, useEffect, useContext} from "react";
 import styled from "styled-components";
 import {UserContext} from "../../contexts/UserContext";
 
@@ -94,13 +95,61 @@ const FbOption = styled.div`
     }
 `;
 
-const alternatives = ["1", "2", "4"];
+const letras = ["A", "B", "C", "D", "E", "F"];
 
-export default function Question() {
-    const alternativeElements = alternatives.map((alt, idx) => {
+export default function Question({question, index}) {
+    const {answers, setAnswers, fbColors} = useContext(UserContext);
+    const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const [feedback, setFeedback] = useState(null); // 'easy', 'medium', 'hard'
+
+    useEffect(() => {
+        if (answers) {
+            setSelectedAnswer(answers[index].answer);
+            setFeedback(answers[index].feedback);
+        }
+    }, [question]);
+
+    function clickAnswer(ansIndex) {
+        let newSelection = ansIndex;
+        let newAnswer = question.answers[ansIndex].text;
+        if (selectedAnswer === newAnswer) {
+            newSelection = null;
+            newAnswer = null;
+        }
+
+        const newAnswers = [...answers];
+        newAnswers[index].answer = newAnswer;
+        console.log(newAnswers);
+
+        setAnswers(newAnswers);
+        setSelectedAnswer(newAnswer);
+    }
+
+    function clickFeedback(feedbackKey) {
+        let newFeedback = feedbackKey;
+
+        if (feedback === feedbackKey) {
+            newFeedback = null;
+        }
+
+        const newAnswers = [...answers];
+        newAnswers[index].feedback = newFeedback;
+        console.log(newAnswers);
+
+        setAnswers(newAnswers);
+        setFeedback(newFeedback);
+    }
+
+    const alternativeElements = question.answers.map((ans, idx) => {
         return (
-            <Alternative key={idx} selected={idx === 2}>
-                {alt}
+            <Alternative
+                key={idx}
+                selected={ans.text === selectedAnswer}
+                onClick={() => {
+                    clickAnswer(idx);
+                }}
+            >
+                {`${letras[idx]}) ${ans.text}`}
             </Alternative>
         );
     });
@@ -108,19 +157,37 @@ export default function Question() {
     return (
         <Container>
             <Header>
-                <h1>{"1) Quanto é 1 + 1?"}</h1>
+                <h1>{`${index + 1}) ${question.title}`}</h1>
             </Header>
             <Main>
                 <Alternatives>{alternativeElements}</Alternatives>
                 <Footer>
                     <Feedbacks>
-                        <FbOption selected={true} color={"red"}>
+                        <FbOption
+                            selected={feedback === "hard"}
+                            color={fbColors["hard"].bg}
+                            onClick={() => {
+                                clickFeedback("hard");
+                            }}
+                        >
                             😓
                         </FbOption>
-                        <FbOption selected={true} color={"yellow"}>
+                        <FbOption
+                            selected={feedback === "medium"}
+                            color={fbColors["medium"].bg}
+                            onClick={() => {
+                                clickFeedback("medium");
+                            }}
+                        >
                             👍
                         </FbOption>
-                        <FbOption selected={true} color={"lightblue"}>
+                        <FbOption
+                            selected={feedback === "easy"}
+                            color={fbColors["easy"].bg}
+                            onClick={() => {
+                                clickFeedback("easy");
+                            }}
+                        >
                             🙂
                         </FbOption>
                     </Feedbacks>

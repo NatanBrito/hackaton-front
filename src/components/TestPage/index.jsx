@@ -1,7 +1,11 @@
+import axios from "axios";
+import {useParams} from "react-router-dom";
+import {useContext, useEffect, useState} from "react";
 import styled from "styled-components";
 import {UserContext} from "../../contexts/UserContext";
 
 import Question from "./Question";
+import {useNavigate} from "react-router-dom";
 
 const Container = styled.div`
     display: flex;
@@ -34,7 +38,6 @@ const HeaderTop = styled.div`
     align-items: center;
     background-color: darkblue;
     padding: 10px 0px;
-    width: 100%;
 `;
 
 const HeaderBottom = styled.div`
@@ -47,15 +50,12 @@ const HeaderBottom = styled.div`
 `;
 
 const QuestionButton = styled.div`
+    box-sizing: content-box;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: ${({selected, color}) => {
-        return selected
-            ? "rgba(255,255,255,0.2)"
-            : color
-            ? color
-            : "rgba(0,0,0,0.2)";
+        return color ? color : "rgba(0,0,0,0.2)";
     }};
     cursor: pointer;
     :hover {
@@ -65,12 +65,23 @@ const QuestionButton = styled.div`
     }
 
     border: ${({selected}) => {
-        return selected ? "1px solid white" : "";
+        return selected ? "2px solid white" : "";
     }};
 
     width: 40px;
     height: 40px;
     border-radius: 100%;
+    position: relative;
+`;
+
+const Notification = styled.div`
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border-radius: 100%;
+    position: absolute;
+    top: 1px;
+    right: 1px;
 `;
 
 const Main = styled.div`
@@ -122,30 +133,138 @@ const SendButton = styled.div`
 `;
 
 export default function TestPage() {
+    const {currentTest, setCurrentTest, answers, setAnswers, fbColors} =
+        useContext(UserContext);
+
+    const [questions, setQuestions] = useState(null);
+    const [currentQuestion, setCurrentQuestion] = useState(null);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(null);
+
+    const {testId} = useParams();
+
+    useEffect(() => {
+        if (!currentTest) {
+            const promise = axios.get(
+                `https://mongo-hackthon.herokuapp.com/tests/${testId}`
+            );
+            promise.then((res) => {
+                console.log(res);
+                setCurrentTest(res.data);
+                const allQuestions = res.data.questions.sort(() =>
+                    Math.random() > 0.5 ? 1 : -1
+                );
+                setQuestions(allQuestions);
+                setCurrentQuestion(allQuestions[0]);
+                setCurrentQuestionIndex(0);
+
+                const cleanAnswers = allQuestions.map((q) => {
+                    let correctAnswer = "";
+                    // console.log(q);
+                    q.answers.forEach((ans) => {
+                        // console.log(ans);
+                        if (ans.isTrue) {
+                            correctAnswer = ans.text;
+                        }
+                    });
+
+                    return {
+                        correctAnswer: correctAnswer,
+                        answer: null,
+                        feedback: null,
+                    };
+                });
+
+                console.log(cleanAnswers);
+                setAnswers(cleanAnswers);
+            });
+            promise.catch((err) => {
+                console.log(err);
+            });
+        }
+    }, []);
+
+    function goToQuestion(index) {
+        setCurrentQuestion(questions[index]);
+        setCurrentQuestionIndex(index);
+    }
+
+    const questionButtonsElements =
+        questions && answers ? (
+            questions.map((q, idx) => {
+                return (
+                    <QuestionButton
+                        key={idx}
+                        onClick={() => {
+                            goToQuestion(idx);
+                        }}
+                        color={
+                            answers[idx].feedback
+                                ? fbColors[answers[idx].feedback].bg
+                                : null
+                        }
+                        selected={currentQuestionIndex === idx}
+                    >
+                        {answers[idx].answer ? (
+                            <></>
+                        ) : (
+                            <Notification></Notification>
+                        )}
+                        {idx + 1}
+                    </QuestionButton>
+                );
+            })
+        ) : (
+            <></>
+        );
+
+    const numOfQuestions = questions ? questions.length : false;
+    const allAnswered = answers
+        ? answers.filter((a) => a.answer !== null).length === numOfQuestions
+        : false;
+
+    const navigate = useNavigate();
+    function sendButtonClicked() {
+        navigate("./results");
+    }
+
     return (
         <Container>
             <Header>
                 <HeaderTop>
-                    <HeaderLeft>
-                        <h1>{"Matemática"}</h1>
-                    </HeaderLeft>
-                    <HeaderRight>
-                        <div>{"10q"}</div>
-                        <div>{"faltam 7"}</div>
-                    </HeaderRight>
+                    {currentQuestion ? (
+                        <>
+                            <HeaderLeft>
+                                <h1>{currentTest.title}</h1>
+                            </HeaderLeft>
+                        </>
+                    ) : (
+                        <></>
+                    )}
                 </HeaderTop>
                 <HeaderBottom>
-                    <QuestionButton selected={true}>1</QuestionButton>
-                    <QuestionButton color={"green"}>2</QuestionButton>
-                    <QuestionButton>3</QuestionButton>
+                    {/* <QuestionButton selected={true} color={"green"}>1</QuestionButton> */}
+                    {questionButtonsElements}
                 </HeaderBottom>
             </Header>
             <Main>
-                <Question></Question>
+                {currentQuestion ? (
+                    <Question
+                        question={currentQuestion}
+                        index={currentQuestionIndex}
+                    ></Question>
+                ) : (
+                    <></>
+                )}
             </Main>
-            <Footer>
-                <SendButton>Enviar respostas!</SendButton>
-            </Footer>
+            {allAnswered ? (
+                <Footer>
+                    <SendButton onClick={sendButtonClicked}>
+                        Enviar respostas!
+                    </SendButton>
+                </Footer>
+            ) : (
+                <></>
+            )}
         </Container>
     );
 }
