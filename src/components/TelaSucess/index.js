@@ -25,7 +25,7 @@ function TelaSucess() {
                     <p>{currentTest.title}</p>
                 </h1>
             </header>
-            <p className='result'>{`Parabéns! Você acertou ${numeroDeAnswers} de ${numeroDeAcertos} questões!`}</p>
+            <p className='result'>{`Parabéns! Você acertou ${numeroDeAcertos} de ${numeroDeAnswers} questões!`}</p>
             <main>
                 {
                     answers.map((pergunta, index) => {
