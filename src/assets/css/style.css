@@ -2,6 +2,11 @@ body,
 * {
     box-sizing: border-box;
     text-decoration: none;
-
     font-family: "Roboto", sans-serif;
+}
+
+body,
+.root {
+    width: 100vw;
+    height: 100vh;
 }
