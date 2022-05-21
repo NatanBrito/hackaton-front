@@ -33,7 +33,7 @@ export default function Home() {
                     return(
                     <Test key={index+Date.now()} 
                     id={materia._id}
-                    color={false?"blue":"purple"}
+                    color="blue"
                      text={materia.type} description={materia.title}
                       numQuestion={materia.questions.length}/>
                     )
@@ -66,7 +66,8 @@ export default function Home() {
  }
 }
 const Descrip=styled.div`
-width: 50%;
+width: 40%;
+margin-right: 2px;
 height: 45px;
 `
 const Description=styled.div`
@@ -75,7 +76,7 @@ height: 45px;
 display: flex;
 align-items: center;
 overflow: hidden;
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 550px) {
     .hidden{
         display: none;
     }
@@ -89,10 +90,11 @@ overflow: hidden;
  font-size: 20px;
  font-weight: 700;
  font-family: 'Roboto', sans-serif;
- margin-top: 10%;
- margin-bottom: 5%;
+ margin-top: 2%;
+ margin-bottom: 7%;
  width: 50%;
  height: 45px;
+ background-color: rgb(144, 144, 144);
  border-radius: 10px;
  border:none;
  :hover{
@@ -112,7 +114,7 @@ overflow: hidden;
  `
  const Hello=styled.div`
  display: flex;
- margin-top:6%;
+ margin-top:8%;
  margin-bottom: 5%;
  span{  
     color: black;
@@ -137,15 +139,10 @@ overflow: hidden;
  background-color: rgba(186, 202, 218, 0.64);
  min-width: 300px;
  .blue{
-    background-color: blue;
+    background-color: darkblue;
    
  }
- .red{
-    background-color: red;
- }
- .purple{
-    background-color: purple;
- }
+
  `
  const Disciplina=styled.div`
  border:none ;
@@ -154,7 +151,7 @@ overflow: hidden;
  justify-content: space-between;
  align-items: center;
  width: 80%;
- height: 50px;
+ height: 80px;
  background-color: blue;
  margin-bottom: 2%;
  border-radius: 10px;
