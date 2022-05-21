@@ -65,7 +65,7 @@ const QuestionButton = styled.div`
     }
 
     border: ${({selected}) => {
-        return selected ? "2px solid white" : "";
+        return selected ? "2px solid white" : "2px solid darkblue";
     }};
 
     width: 40px;
